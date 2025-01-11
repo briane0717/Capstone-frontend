@@ -2,11 +2,11 @@ import { Routes, Route } from "react-router";
 import { useState } from "react";
 import "./App.css";
 import HomePage from "./pages/HomePage";
-import ProductsList from "./pages/ProductsList";
+import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
 import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
-import Products from "./components/Products";
+
 function App() {
   return (
     <>
