@@ -34,6 +34,10 @@ const ProductDetails = () => {
       });
       setAddedToCart(true);
       // console.log("Added to cart:", response.data);
+
+      setTimeout(() => {
+        setAddedToCart(null);
+      }, 2000);
     } catch (error) {
       console.error("Error adding to cart:", error);
       setError(error.message);

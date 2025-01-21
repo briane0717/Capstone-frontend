@@ -1,81 +1,90 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
+import { Link } from "react-router";
 import axios from "axios";
-// import { useNavigate } from "react-router";
+import { useCart } from "../context/CartContext";
+import CartItem from "../components/Cart/CartItem";
+import "../styles/CartPage.css";
 
 const CartPage = () => {
-  const [cart, setCart] = useState({ items: [], totalPrice: 0 });
-  const [loading, setLoading] = useState(true);
-  // const navigate = useNavigate();
+  const { cart, setCart, loading, setLoading, error, setError } = useCart();
 
   useEffect(() => {
+    const fetchCart = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get("http://localhost:5050/api/cart");
+        setCart(response.data || { items: [], totalPrice: 0 });
+      } catch (err) {
+        setError("Failed to load cart data");
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchCart();
-  }, []);
+  }, [setCart, setLoading, setError]);
 
-  const fetchCart = async () => {
+  const handleUpdateQuantity = async (productId, newQuantity) => {
     try {
-      const response = await axios.get("http://localhost:5050/api/cart");
+      const response = await axios.put(
+        `http://localhost:5050/api/cart/update/${productId}`,
+        {
+          productId,
+          quantity: newQuantity,
+        }
+      );
       setCart(response.data);
-    } catch (error) {
-      console.error("Error fetching cart:", error);
-    } finally {
-      setLoading(false);
+    } catch (err) {
+      console.error("Error updating quantity:", err);
+      setError("Failed to update quantity");
     }
   };
 
-  const updateQuantity = async (productId, quantity) => {
+  // CartPage.jsx
+  const handleRemoveItem = async (productId) => {
     try {
-      await axios.put(`http://localhost:5050/api/cart/update/${productId}`, {
-        productId,
-        quantity,
-      });
-      fetchCart();
-    } catch (error) {
-      console.error("Error updating quantity:", error);
+      const response = await axios.delete(
+        `http://localhost:5050/api/cart/remove/${productId}`
+      );
+      setCart(response.data);
+      setError(null);
+    } catch (err) {
+      console.error("Error details:", err.response?.data);
+      setError("Failed to remove item");
     }
   };
 
-  const removeItem = async (productId) => {
-    try {
-      await axios.delete(`http://localhost:5050/api/cart/remove/${productId}`);
-      fetchCart();
-    } catch (error) {
-      console.error("Error removing item:", error);
-    }
-  };
-
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <p>Loading cart...</p>;
+  if (error) return <p>Error: {error}</p>;
+  if (!cart?.items?.length) return <p>Your cart is empty.</p>;
 
   return (
-    <div>
-      <h1>Cart</h1>
-      {cart.items.length > 0 ? (
-        <>
-          {cart.items.map((item) => (
-            <div key={item.productId._id}>
-              <h3>{item.productId.name}</h3>
-              <p>Price: ${item.price}</p>
-              <input
-                type="number"
-                min="1"
-                value={item.quantity}
-                onChange={(e) =>
-                  updateQuantity(item.productId._id, parseInt(e.target.value))
-                }
-              />
-              <button onClick={() => removeItem(item.productId._id)}>
-                Remove
-              </button>
-            </div>
-          ))}
-          <div>
-            <h3>Total: ${cart.totalPrice}</h3>
-            <button onClick={() => navigate("/checkout")}>Checkout</button>
-          </div>
-        </>
-      ) : (
-        <p>Your cart is empty</p>
-      )}
+    <div className="cart-container">
+      <h1>Your Cart</h1>
+      <ul className="cart-list">
+        {cart.items.map((item, index) => {
+          if (!item.productId || !item.productId._id) {
+            console.error(`Invalid product at index ${index}:`, item);
+            // Skip rendering this item if it's invalid
+            return null;
+          }
+          return (
+            <CartItem
+              key={item.productId._id}
+              item={item}
+              onUpdateQuantity={handleUpdateQuantity}
+              onRemoveItem={handleRemoveItem}
+            />
+          );
+        })}
+      </ul>
+      <h2>Total: ${(cart.totalPrice || 0).toFixed(2)}</h2>
+      <Link to="/checkout">
+        <button className="checkout-button">Proceed to Checkout</button>
+      </Link>
     </div>
   );
 };
+
 export default CartPage;

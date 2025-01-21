@@ -16,6 +16,10 @@ const Products = () => {
         quantity: 1,
       });
       setAddedToCart(productId);
+
+      setTimeout(() => {
+        setAddedToCart(null);
+      }, 2000);
       // TODO: Update UI to reflect the item was added to the cart
     } catch (error) {
       console.error("Error adding item to cart:", error);
@@ -67,6 +71,9 @@ const Products = () => {
                 <button onClick={() => handleAddToCart(product._id)}>
                   {addedToCart === product._id ? "Added!" : "Add To Cart"}
                 </button>
+                <button>Add Product</button>
+                <button>Delete Product</button>
+                <button>Update Product</button>
               </li>
             ))
           ) : (

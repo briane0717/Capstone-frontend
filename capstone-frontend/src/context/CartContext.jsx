@@ -1,73 +1,31 @@
-// src/context/CartContext.jsx
-import { createContext, useContext, useState, useEffect } from "react";
-import axios from "axios";
+import React, { createContext, useContext, useState } from "react";
 
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState({ items: [], totalPrice: 0 });
-  const [loading, setLoading] = useState(true);
+  const [cart, setCart] = useState({
+    items: [],
+  });
+  console.log("CartContext - cart state:", cart);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchCart();
-  }, []);
-
-  const fetchCart = async () => {
-    try {
-      const response = await axios.get("http://localhost:5050/api/cart");
-      setCart(response.data);
-    } catch (error) {
-      console.error("Error fetching cart:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const addToCart = async (productId, quantity = 1) => {
-    try {
-      const response = await axios.post("http://localhost:5050/api/cart/add", {
-        productId,
-        quantity,
-      });
-      setCart(response.data);
-    } catch (error) {
-      console.error("Error adding to cart:", error);
-    }
-  };
-
-  const updateQuantity = async (productId, quantity) => {
-    try {
-      const response = await axios.put(
-        `http://localhost:5050/api/cart/update/${productId}`,
-        {
-          productId,
-          quantity,
-        }
+  const updateQuantity = (productId, newQuantity) => {
+    setCart((prevCart) => {
+      const updatedItems = prevCart.items.map((item) =>
+        item.productId === productId ? { ...item, quantity: newQuantity } : item
       );
-      setCart(response.data);
-    } catch (error) {
-      console.error("Error updating cart:", error);
-    }
+      return { ...prevCart, items: updatedItems };
+    });
   };
 
-  const removeFromCart = async (productId) => {
-    try {
-      const response = await axios.delete(
-        `http://localhost:5050/api/cart/remove/${productId}`
+  const removeFromCart = (productId) => {
+    setCart((prevCart) => {
+      const updatedItems = prevCart.items.filter(
+        (item) => item.productId !== productId
       );
-      setCart(response.data);
-    } catch (error) {
-      console.error("Error removing from cart:", error);
-    }
-  };
-
-  const clearCart = async () => {
-    try {
-      await axios.delete("http://localhost:5050/api/cart/clear");
-      setCart({ items: [], totalPrice: 0 });
-    } catch (error) {
-      console.error("Error clearing cart:", error);
-    }
+      return { ...prevCart, items: updatedItems };
+    });
   };
 
   return (
@@ -75,10 +33,12 @@ export const CartProvider = ({ children }) => {
       value={{
         cart,
         loading,
-        addToCart,
+        error,
+        setCart,
+        setLoading,
+        setError,
         updateQuantity,
         removeFromCart,
-        clearCart,
       }}
     >
       {children}
@@ -86,4 +46,7 @@ export const CartProvider = ({ children }) => {
   );
 };
 
-export const useCart = () => useContext(CartContext);
+// Custom hook for accessing cart context
+export const useCart = () => {
+  return useContext(CartContext);
+};
