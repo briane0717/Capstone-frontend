@@ -6,6 +6,7 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [addedToCart, setAddedToCart] = useState(null);
   // const [page, setPage] = useState(1);
   // const [totalPages, setTotalPages] = useState(1);
   const handleAddToCart = async (productId) => {
@@ -14,6 +15,7 @@ const Products = () => {
         productId,
         quantity: 1,
       });
+      setAddedToCart(productId);
       // TODO: Update UI to reflect the item was added to the cart
     } catch (error) {
       console.error("Error adding item to cart:", error);
@@ -60,10 +62,10 @@ const Products = () => {
               <li key={product._id}>
                 Name:{" "}
                 <Link to={`/products/${product._id}`}>{product.name}</Link>
-                <p>Price: {product.price}</p>
+                <p>Price: ${product.price}</p>
                 <p>Stock Status: {product.stockStatus}</p>
                 <button onClick={() => handleAddToCart(product._id)}>
-                  Add To Cart
+                  {addedToCart === product._id ? "Added!" : "Add To Cart"}
                 </button>
               </li>
             ))

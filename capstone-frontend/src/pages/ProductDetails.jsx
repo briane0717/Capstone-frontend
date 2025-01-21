@@ -8,6 +8,7 @@ const ProductDetails = () => {
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [error, setError] = useState(null);
+  const [addedToCart, setAddedToCart] = useState(false);
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -31,8 +32,8 @@ const ProductDetails = () => {
         productId: id,
         quantity: quantity,
       });
+      setAddedToCart(true);
       // console.log("Added to cart:", response.data);
-   ;
     } catch (error) {
       console.error("Error adding to cart:", error);
       setError(error.message);
@@ -59,8 +60,8 @@ const ProductDetails = () => {
             setQuantity(Math.min(parseInt(e.target.value), product.quantity))
           }
         />
-        <button onClick={handleAddToCart} disabled={product.quantity < 1}>
-          Add To Cart
+        <button onClick={handleAddToCart}>
+          {addedToCart ? "Added!" : "Add To Cart"}
         </button>
       </div>
     </div>
