@@ -26,7 +26,7 @@ const CartItem = ({ item, onUpdateQuantity, onRemoveItem }) => {
         <p>
           Subtotal: ${((item.price || 0) * (item.quantity || 0)).toFixed(2)}
         </p>
-        // CartItem.jsx
+
         <button
           onClick={() => {
             console.log("Removing product:", item.productId._id);
