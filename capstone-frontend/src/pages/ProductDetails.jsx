@@ -1,37 +1,68 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router"; // To access the product ID from the URL
-import axios from "axios"; // Import axios
+import { useParams } from "react-router";
+import axios from "axios";
 
 const ProductDetails = () => {
-  const { id } = useParams(); // Get the product ID from the URL
+  const { id } = useParams();
+
   const [product, setProduct] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Fetch the product data based on the ID using Axios
     const fetchProductDetails = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5050/api/product/${id}`
+          `http://localhost:5050/api/products/${id}`
         );
-        setProduct(response.data); // Set the product data in the state
+        setProduct(response.data);
       } catch (error) {
         console.error("Error fetching product details:", error);
+        setError(error.message);
       }
     };
-
     fetchProductDetails();
   }, [id]);
 
+  const handleAddToCart = async () => {
+    console.log("Button Clicked");
+    try {
+      const response = await axios.post("http://localhost:5050/api/cart/add", {
+        productId: id,
+        quantity: quantity,
+      });
+      // console.log("Added to cart:", response.data);
+   ;
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      setError(error.message);
+    }
+  };
+
+  if (error) return <div>Error: {error}</div>;
   if (!product) return <div>Loading...</div>;
 
   return (
     <div>
       <h1>{product.name}</h1>
-      <img src={product.image} alt={product.name} />
+      <img src={product.images?.[0]} alt={product.name} />
       <p>{product.description}</p>
       <p>Price: ${product.price}</p>
-      <p>Category: {product.category}</p>
-      <p>Quantity: {product.quantity}</p>
+      <p>Available: {product.quantity}</p>
+      <div>
+        <input
+          type="number"
+          min="1"
+          max={product.quantity}
+          value={quantity}
+          onChange={(e) =>
+            setQuantity(Math.min(parseInt(e.target.value), product.quantity))
+          }
+        />
+        <button onClick={handleAddToCart} disabled={product.quantity < 1}>
+          Add To Cart
+        </button>
+      </div>
     </div>
   );
 };
