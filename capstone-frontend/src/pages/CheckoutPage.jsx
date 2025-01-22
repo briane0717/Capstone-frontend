@@ -76,6 +76,30 @@ const CheckoutPage = () => {
     }
   };
 
+  // Handle form changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setShippingInfo((prevInfo) => {
+      if (name.includes("contactDetails")) {
+        return {
+          ...prevInfo,
+          contactDetails: {
+            ...prevInfo.contactDetails,
+            [name]: value,
+          },
+        };
+      } else {
+        return {
+          ...prevInfo,
+          shippingAddress: {
+            ...prevInfo.shippingAddress,
+            [name]: value,
+          },
+        };
+      }
+    });
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
