@@ -1,6 +1,6 @@
 // App.jsx
 import { Routes, Route } from "react-router";
-import Navbar from "./components/Nav";
+import Navbar from "./components/NavBar";
 import { CartProvider } from "./context/CartContext";
 import HomePage from "./pages/HomePage";
 import Products from "./pages/Products";
