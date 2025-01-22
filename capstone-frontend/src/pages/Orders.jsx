@@ -11,6 +11,11 @@ const Orders = () => {
 
   useEffect(() => {
     const fetchOrders = async () => {
+      if (!emailFilter) {
+        setOrders([]);
+        setLoading(false);
+        return;
+      }
       try {
         const response = await axios.get("http://localhost:5050/api/orders", {
           params: { email: emailFilter },
@@ -38,6 +43,7 @@ const Orders = () => {
       <h1 className="text-2xl font-bold mb-6">Orders History</h1>
 
       <div className="mb-6">
+        <p className="mb-2 text-sm text-gray-600">Enter email to view orders</p>
         <input
           type="email"
           placeholder="Filter by email"
