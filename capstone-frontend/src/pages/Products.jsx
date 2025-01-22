@@ -20,7 +20,7 @@ const Products = () => {
     try {
       await axios.post("http://localhost:5050/api/cart/add", {
         productId,
-        quantity: 1,
+        quantity: quantity,
       });
       setAddedToCart(productId);
       setTimeout(() => setAddedToCart(null), 2000);

@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from "react-router";
+import { useCart } from "../context/CartContext";
 
 const Navbar = () => {
+  const { cart } = useCart();
   return (
     <nav className="bg-blue-600 shadow-lg py-4">
       <div className="max-w-7xl mx-auto px-6 flex items-center space-x-6">
@@ -43,7 +45,7 @@ const Navbar = () => {
               🛒
             </span>
             <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-              0
+              {cart.totalItems}
             </span>
           </Link>
 
