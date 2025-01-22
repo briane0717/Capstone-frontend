@@ -1,11 +1,17 @@
 import React from "react";
 
 const CheckoutPage = () => {
-  return (
-    <div>
-      <h1>Checkout</h1>
-    </div>
-  );
+  const [shippingInfo, setShippingInfo] = useState({
+    contactDetails: { email: "", phone: "" },
+    shippingAddress: {
+      street: "",
+      city: "",
+      state: "",
+      postleCode: "",
+      country: "",
+    },
+  });
+  return <div></div>;
 };
 
 export default CheckoutPage;
