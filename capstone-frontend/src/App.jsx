@@ -10,6 +10,8 @@ import CheckoutPage from "./pages/CheckoutPage";
 import Orders from "./pages/Orders";
 import OrderDetails from "./pages/OrderDetails";
 import OrderConfirmation from "./pages/OrderConfirmation";
+import CreateProduct from "./pages/CreateProduct";
+import DeleteProduct from "./pages/DeleteProduct";
 import "./App.css";
 
 function App() {
@@ -20,6 +22,8 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetails />} />
+        <Route path="/products/create" element={<CreateProduct />} />
+        <Route path="/products/delete" element={<DeleteProduct />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/orders" element={<Orders />} />

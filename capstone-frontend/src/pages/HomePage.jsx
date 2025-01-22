@@ -50,10 +50,10 @@ const Homepage = () => {
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              Welcome to Our Shop
+              Welcome to Gifted
             </h1>
             <p className="text-lg text-gray-600 mb-8">
-              Discover amazing products at great prices
+              Exceptional Gifts for Extraordinary Moments
             </p>
             <Link
               to="/products"
@@ -85,10 +85,14 @@ const Homepage = () => {
                       src={product.images[0]}
                       alt={product.name}
                       className="w-full h-48 object-cover rounded-lg"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "/api/placeholder/400/320";
+                      }}
                     />
                   ) : (
                     <div className="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center">
-                      <span className="text-gray-500">No image</span>
+                      <span className="text-gray-500">Product Image</span>
                     </div>
                   )}
                 </div>

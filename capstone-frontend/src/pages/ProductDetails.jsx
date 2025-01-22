@@ -6,7 +6,6 @@ import { useCart } from "../context/CartContext";
 const ProductDetails = () => {
   const { id } = useParams();
   const { setCart } = useCart();
-
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [error, setError] = useState(null);
@@ -33,10 +32,8 @@ const ProductDetails = () => {
   }, [id]);
 
   const handleAddToCart = async () => {
-    // Reset previous errors
     setError(null);
 
-    // Additional frontend validation
     if (!product) {
       setError("Product not available");
       return;
@@ -58,13 +55,9 @@ const ProductDetails = () => {
         quantity: quantity,
       });
 
-      // Update cart context
       setCart(response.data);
-
-      // Show added to cart confirmation
       setAddedToCart(true);
 
-      // Reset added to cart state after 2 seconds
       setTimeout(() => {
         setAddedToCart(null);
       }, 2000);
@@ -77,7 +70,6 @@ const ProductDetails = () => {
     }
   };
 
-  // Handle quantity input changes
   const handleQuantityChange = (e) => {
     const inputQuantity = parseInt(e.target.value);
 
@@ -92,41 +84,41 @@ const ProductDetails = () => {
     }
   };
 
-  // Loading state
   if (loading) return <div className="p-4">Loading product details...</div>;
-
-  // Error fetching product
   if (error) return <div className="p-4 text-red-500">Error: {error}</div>;
-
-  // No product found
   if (!product) return <div className="p-4">Product not found</div>;
 
   return (
     <div className="max-w-2xl mx-auto p-4">
-      {/* Error Message */}
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
           {error}
         </div>
       )}
-      {/* Product Image */}
       <div className="mb-6">
         <img
-          src={product.images?.[0]}
+          src={
+            product.images?.[0]?.startsWith("http")
+              ? product.images[0]
+              : `http://localhost:5050${product.images?.[0]}` ||
+                "/api/placeholder/400/320"
+          }
           alt={product.name}
           className="w-full h-96 object-cover rounded-lg"
+          onError={(e) => {
+            if (!e.target.src.includes("/api/placeholder")) {
+              e.target.src = "/api/placeholder/400/320";
+            }
+          }}
         />
       </div>
-      {/*  Product Out of Stock */}
       {product.quantity === 0 && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
           <strong>Out of Stock</strong> - This product is currently unavailable
         </div>
       )}
-      {/* Product Details */}
       <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
       <p className="text-gray-600 mb-4">{product.description}</p>
-      {/* Price and Availability */}
       <div className="flex justify-between items-center mb-4">
         <p className="text-2xl font-semibold text-blue-600">
           ${product.price.toFixed(2)}
@@ -141,7 +133,6 @@ const ProductDetails = () => {
             : `Available: ${product.quantity} items`}
         </p>
       </div>
-      {/* Quantity and Add to Cart */}
       <div className="flex items-center space-x-4">
         <input
           type="number"

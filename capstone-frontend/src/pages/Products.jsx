@@ -25,13 +25,9 @@ const Products = () => {
         quantity: 1,
       });
 
-      // Update the cart context
       setCart(response.data);
-
-      // Ensure addedToCart state updates
       setAddedToCart(productId);
 
-      // Reset the added state after 2 seconds
       setTimeout(() => {
         setAddedToCart(null);
       }, 2000);
@@ -128,6 +124,27 @@ const Products = () => {
             }`}
           >
             <Link to={`/products/${product._id}`} className="block mb-2">
+              {product.images?.[0] ? (
+                <img
+                  src={
+                    product.images?.[0]?.startsWith("http")
+                      ? product.images[0]
+                      : `http://localhost:5050${product.images?.[0]}` ||
+                        "/api/placeholder/400/320"
+                  }
+                  alt={product.name}
+                  className="w-full h-96 object-cover rounded-lg"
+                  onError={(e) => {
+                    if (!e.target.src.includes("/api/placeholder")) {
+                      e.target.src = "/api/placeholder/400/320";
+                    }
+                  }}
+                />
+              ) : (
+                <div className="w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center">
+                  <span className="text-gray-500">Product Image</span>
+                </div>
+              )}
               <h2 className="text-xl font-semibold">{product.name}</h2>
             </Link>
             <p className="text-gray-600 mb-2">${product.price}</p>
