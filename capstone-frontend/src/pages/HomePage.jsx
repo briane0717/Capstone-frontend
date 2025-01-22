@@ -82,12 +82,18 @@ const Homepage = () => {
                 <div className="aspect-w-1 aspect-h-1 mb-4">
                   {product.images?.[0] ? (
                     <img
-                      src={product.images[0]}
+                      src={
+                        product.images?.[0]?.startsWith("http")
+                          ? product.images[0]
+                          : `http://localhost:5050${product.images?.[0]}` ||
+                            "/api/placeholder/400/320"
+                      }
                       alt={product.name}
-                      className="w-full h-48 object-cover rounded-lg"
+                      className="w-full h-96 object-cover rounded-lg"
                       onError={(e) => {
-                        e.target.onerror = null;
-                        e.target.src = "/api/placeholder/400/320";
+                        if (!e.target.src.includes("/api/placeholder")) {
+                          e.target.src = "/api/placeholder/400/320";
+                        }
                       }}
                     />
                   ) : (

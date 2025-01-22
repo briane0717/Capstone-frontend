@@ -1,48 +1,57 @@
-# Capstone-frontend
+# Gifted E-Commerce Frontend
 
-# E-Commerce Frontend
+Modern React-based frontend for an e-commerce gift platform featuring comprehensive product management and shopping features.
 
-React-based frontend for an e-commerce platform featuring product browsing, cart management, and order processing.
+## Core Features
 
-## Features
-
-- Product catalog with filtering and pagination
-- Shopping cart
-- Checkout process
-- Order tracking
-- Responsive design
+- Product browsing with filters and search
+- Shopping cart management
+- Secure checkout process
+- Order tracking and management
+- Admin product management (CRUD operations)
+- Responsive design for all devices
 
 ## Tech Stack
 
 - React
-- React Router
-- Context API
-- Tailwind CSS
-- Axios
+- React Router for navigation
+- Context API for state management
+- Tailwind CSS for styling
+- Axios for API communication
+
+## Pages
+
+- Home: Featured products and welcome
+- Products: Browse and filter catalog
+- Product Details: Individual product view
+- Cart: Shopping cart management
+- Checkout: Order processing
+- Orders: Order history and tracking
+- Admin: Product creation, updates, deletion
 
 ## Installation
 
-1. Clone the repository
+1. Clone repository:
 
 ```bash
 git clone [frontend-repo-url]
 cd frontend
 ```
 
-2. Install dependencies
+2. Install dependencies:
 
 ```bash
 npm install
 ```
 
-3. Environment Setup
+3. Environment Setup:
    Create `.env`:
 
 ```
 REACT_APP_API_URL=http://localhost:5050
 ```
 
-4. Start Development Server
+4. Start Development Server:
 
 ```bash
 npm start
@@ -54,23 +63,34 @@ npm start
 src/
 ├── components/
 │   ├── Cart/
+│   ├── Product/
 │   └── UI/
 ├── context/
 ├── pages/
 └── styles/
 ```
 
-## Main Components
+## API Integration
 
-- Products: Browse and filter products
-- Cart: Manage shopping cart
-- Checkout: Process orders
-- Orders: View order history and status
+The frontend interfaces with the backend REST API for:
+
+- Product management (CRUD)
+- Cart operations
+- Order processing
+- Stock management
+
+## Security Features
+
+- Input validation
+- Error handling
+- API error management
+- Session management
 
 ## Future Enhancements
 
 - User authentication
-- Product search
-- Wishlist
-- Product reviews
-- Payment integration
+- Advanced search features
+- Wishlist functionality
+- Product reviews and ratings
+- Payment gateway integration
+- Admin dashboard

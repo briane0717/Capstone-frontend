@@ -12,6 +12,7 @@ import OrderDetails from "./pages/OrderDetails";
 import OrderConfirmation from "./pages/OrderConfirmation";
 import CreateProduct from "./pages/CreateProduct";
 import DeleteProduct from "./pages/DeleteProduct";
+import UpdateProduct from "./pages/UpdateProduct";
 import "./App.css";
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
         <Route path="/products/:id" element={<ProductDetails />} />
         <Route path="/products/create" element={<CreateProduct />} />
         <Route path="/products/delete" element={<DeleteProduct />} />
+        <Route path="/products/update" element={<UpdateProduct />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/orders" element={<Orders />} />
