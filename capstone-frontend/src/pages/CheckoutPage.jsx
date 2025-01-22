@@ -15,14 +15,13 @@ const CheckoutPage = () => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <h2>Shipping Information</h2>
-
+        <h2>Contact Information</h2>
         <label>
           <input
-            type="text"
-            name="firstName"
-            placeholder="First Name"
-            value={shippingInfo.firstName}
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={shippingInfo.contactDetails.email}
             onChange={handleChange}
             required
           />
@@ -30,23 +29,22 @@ const CheckoutPage = () => {
 
         <label>
           <input
-            type="text"
-            name="lastName"
-            placeholder="Last Name"
-            value={shippingInfo.lastName}
+            type="tel"
+            name="phone"
+            placeholder="Phone"
+            value={shippingInfo.contactDetails.phone}
             onChange={handleChange}
             required
           />
         </label>
 
         <h3>Shipping Address</h3>
-
         <label>
           <input
             type="text"
             name="street"
-            placeholder="Address"
-            value={shippingInfo.street}
+            placeholder="Street Address"
+            value={shippingInfo.shippingAddress.street}
             onChange={handleChange}
             required
           />
@@ -57,7 +55,7 @@ const CheckoutPage = () => {
             type="text"
             name="city"
             placeholder="City"
-            value={shippingInfo.city}
+            value={shippingInfo.shippingAddress.city}
             onChange={handleChange}
             required
           />
@@ -68,7 +66,7 @@ const CheckoutPage = () => {
             type="text"
             name="state"
             placeholder="State"
-            value={shippingInfo.state}
+            value={shippingInfo.shippingAddress.state}
             onChange={handleChange}
             required
           />
@@ -79,7 +77,7 @@ const CheckoutPage = () => {
             type="text"
             name="postalCode"
             placeholder="Postal Code"
-            value={shippingInfo.postalCode}
+            value={shippingInfo.shippingAddress.postalCode}
             onChange={handleChange}
             required
           />
@@ -90,11 +88,13 @@ const CheckoutPage = () => {
             type="text"
             name="country"
             placeholder="Country"
-            value={shippingInfo.country}
+            value={shippingInfo.shippingAddress.country}
             onChange={handleChange}
             required
           />
         </label>
+
+        <button type="submit">Submit</button>
       </form>
     </div>
   );
