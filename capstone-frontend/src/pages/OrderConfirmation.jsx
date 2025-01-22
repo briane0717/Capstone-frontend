@@ -27,7 +27,9 @@ const OrderConfirmation = () => {
 
       <div className="space-y-4">
         <Link
-          to={`/orders/${orderId}`}
+          to={`/orders/${orderId}?email=${encodeURIComponent(
+            location.state.email
+          )}`}
           className="block w-full bg-blue-600 text-white p-3 rounded hover:bg-blue-700"
         >
           View Order Details

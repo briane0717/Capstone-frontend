@@ -89,6 +89,7 @@ const CheckoutPage = () => {
           state: {
             orderId: response.data._id,
             orderTotal: response.data.paymentInfo.orderTotal,
+            email: formData.contactDetails.email, // Add this
           },
         });
       }

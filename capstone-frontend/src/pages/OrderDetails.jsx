@@ -1,19 +1,29 @@
-// OrderDetails.jsx
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router";
+import { useParams, useLocation } from "react-router";
 import axios from "axios";
 
 const OrderDetails = () => {
   const { id } = useParams();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const email = searchParams.get("email");
+
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchOrder = async () => {
+      if (!email) {
+        setError("Email is required");
+        setLoading(false);
+        return;
+      }
+
       try {
         const response = await axios.get(
-          `http://localhost:5050/api/orders/${id}`
+          `http://localhost:5050/api/orders/${id}`,
+          { params: { email } }
         );
         setOrder(response.data);
       } catch (err) {
@@ -26,7 +36,7 @@ const OrderDetails = () => {
     };
 
     fetchOrder();
-  }, [id]);
+  }, [id, email]);
 
   if (loading) return <div className="p-4">Loading...</div>;
   if (error) return <div className="p-4 text-red-500">Error: {error}</div>;
