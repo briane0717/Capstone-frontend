@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router";
 
 const CheckoutPage = () => {
   const [shippingInfo, setShippingInfo] = useState({
@@ -12,6 +14,68 @@ const CheckoutPage = () => {
     },
   });
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Validate that required fields are not empty
+    if (
+      !shippingInfo.contactDetails.email ||
+      !shippingInfo.contactDetails.phone ||
+      !shippingInfo.shippingAddress.street ||
+      !shippingInfo.shippingAddress.city ||
+      !shippingInfo.shippingAddress.state ||
+      !shippingInfo.shippingAddress.postalCode ||
+      !shippingInfo.shippingAddress.country
+    ) {
+      setError("Please fill out all required fields.");
+      return;
+    }
+    try {
+      const orderData = {
+        customerInfo: {
+          contactDetails: {
+            email: shippingInfo.contactDetails.email,
+            phone: shippingInfo.contactDetails.phone,
+          },
+          shippingAddress: {
+            street: shippingInfo.shippingAddress.street,
+            city: shippingInfo.shippingAddress.city,
+            state: shippingInfo.shippingAddress.state,
+            postalCode: shippingInfo.shippingAddress.postalCode,
+            country: shippingInfo.shippingAddress.country,
+          },
+        },
+        orderItems: cart.items.map((item) => ({
+          product: item.productId._id,
+          quantity: item.quantity,
+          priceAtPurchase: item.price,
+        })),
+        paymentInfo: {
+          method: "stripe",
+          orderTotal: cart.totalPrice,
+        },
+        shippingDetails: {
+          method: "standard",
+          cost: 5.99,
+          estimatedDeliveryDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
+        },
+      };
+
+      // Send the order data to the backend
+      await axios.post("/api/orders", orderData);
+
+      // Clear the cart after submitting the order
+      setCart({ items: [], totalPrice: 0 });
+      navigate("/order-confirmation");
+    } catch (err) {
+      console.error(err);
+      setError("An error occurred. Please try again.");
+    }
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
