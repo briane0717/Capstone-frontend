@@ -1,6 +1,6 @@
 // App.jsx
 import { Routes, Route } from "react-router";
-import "./App.css";
+import Navbar from "./components/Nav";
 import { CartProvider } from "./context/CartContext";
 import HomePage from "./pages/HomePage";
 import Products from "./pages/Products";
@@ -10,10 +10,12 @@ import CheckoutPage from "./pages/CheckoutPage";
 import Orders from "./pages/Orders";
 import OrderDetails from "./pages/OrderDetails";
 import OrderConfirmation from "./pages/OrderConfirmation";
+import "./App.css";
 
 function App() {
   return (
     <CartProvider>
+      <Navbar />
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/products" element={<Products />} />
