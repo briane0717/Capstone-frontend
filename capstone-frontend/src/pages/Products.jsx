@@ -121,23 +121,41 @@ const Products = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => (
-          <div key={product._id} className="border rounded-lg p-4 shadow">
+          <div
+            key={product._id}
+            className={`border rounded-lg p-4 shadow ${
+              product.quantity === 0 ? "opacity-50" : ""
+            }`}
+          >
             <Link to={`/products/${product._id}`} className="block mb-2">
               <h2 className="text-xl font-semibold">{product.name}</h2>
             </Link>
             <p className="text-gray-600 mb-2">${product.price}</p>
-            <p className="text-sm text-gray-500 mb-4">
-              Stock: {product.quantity}
+            <p
+              className={`text-sm mb-4 ${
+                product.quantity === 0 ? "text-red-500" : "text-gray-500"
+              }`}
+            >
+              {product.quantity === 0
+                ? "Out of Stock"
+                : `Stock: ${product.quantity}`}
             </p>
             <button
               onClick={() => handleAddToCart(product._id)}
+              disabled={product.quantity === 0}
               className={`w-full p-2 rounded ${
-                addedToCart === product._id
+                product.quantity === 0
+                  ? "bg-gray-300 cursor-not-allowed"
+                  : addedToCart === product._id
                   ? "bg-green-500 text-white"
                   : "bg-blue-600 text-white hover:bg-blue-700"
               }`}
             >
-              {addedToCart === product._id ? "Added!" : "Add To Cart"}
+              {product.quantity === 0
+                ? "Out of Stock"
+                : addedToCart === product._id
+                ? "Added!"
+                : "Add To Cart"}
             </button>
           </div>
         ))}
