@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router";
 import axios from "axios";
+import { useCart } from "../context/CartContext";
 
 const Products = () => {
+  const { setCart } = useCart();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,12 +20,21 @@ const Products = () => {
 
   const handleAddToCart = async (productId) => {
     try {
-      await axios.post("http://localhost:5050/api/cart/add", {
+      const response = await axios.post("http://localhost:5050/api/cart/add", {
         productId,
-        quantity: quantity,
+        quantity: 1,
       });
+
+      // Update the cart context
+      setCart(response.data);
+
+      // Ensure addedToCart state updates
       setAddedToCart(productId);
-      setTimeout(() => setAddedToCart(null), 2000);
+
+      // Reset the added state after 2 seconds
+      setTimeout(() => {
+        setAddedToCart(null);
+      }, 2000);
     } catch (error) {
       console.error("Error adding item to cart:", error);
     }

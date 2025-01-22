@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import axios from "axios";
+import { useCart } from "../context/CartContext";
 
 const ProductDetails = () => {
   const { id } = useParams();
+  const { setCart } = useCart();
 
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -26,15 +28,16 @@ const ProductDetails = () => {
   }, [id]);
 
   const handleAddToCart = async () => {
-    console.log("Button Clicked");
     try {
       const response = await axios.post("http://localhost:5050/api/cart/add", {
         productId: id,
         quantity: quantity,
       });
-      setAddedToCart(true);
-      // console.log("Added to cart:", response.data);
 
+      // Update the cart context with the new cart data
+      setCart(response.data);
+
+      setAddedToCart(true);
       setTimeout(() => {
         setAddedToCart(null);
       }, 2000);

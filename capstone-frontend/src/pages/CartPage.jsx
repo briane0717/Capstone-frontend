@@ -41,7 +41,6 @@ const CartPage = () => {
     }
   };
 
-  // CartPage.jsx
   const handleRemoveItem = async (productId) => {
     try {
       const response = await axios.delete(
@@ -52,6 +51,19 @@ const CartPage = () => {
     } catch (err) {
       console.error("Error details:", err.response?.data);
       setError("Failed to remove item");
+    }
+  };
+
+  const handleClearCart = async () => {
+    try {
+      const response = await axios.delete(
+        "http://localhost:5050/api/cart/clear"
+      );
+      setCart({ items: [], totalPrice: 0 });
+      setError(null);
+    } catch (err) {
+      console.error("Error clearing cart:", err.response?.data);
+      setError("Failed to clear cart");
     }
   };
 
@@ -66,7 +78,6 @@ const CartPage = () => {
         {cart.items.map((item, index) => {
           if (!item.productId || !item.productId._id) {
             console.error(`Invalid product at index ${index}:`, item);
-            // Skip rendering this item if it's invalid
             return null;
           }
           return (
@@ -80,9 +91,18 @@ const CartPage = () => {
         })}
       </ul>
       <h2>Total: ${(cart.totalPrice || 0).toFixed(2)}</h2>
-      <Link to="/checkout">
-        <button className="checkout-button">Proceed to Checkout</button>
-      </Link>
+
+      <div className="cart-actions flex justify-between items-center">
+        <button
+          onClick={handleClearCart}
+          className="clear-cart-button bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+        >
+          Clear Cart
+        </button>
+        <Link to="/checkout">
+          <button className="checkout-button">Proceed to Checkout</button>
+        </Link>
+      </div>
     </div>
   );
 };
